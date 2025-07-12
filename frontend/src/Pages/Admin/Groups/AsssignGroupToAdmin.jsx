@@ -47,7 +47,7 @@ const AssignGroupToAdmin = () => {
   // Group list
   const GroupListAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/grouplist`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/grouplist`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -63,7 +63,7 @@ const AssignGroupToAdmin = () => {
   // Admin list
   const AdminsListAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/getalladmin`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/getalladmin`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -81,7 +81,7 @@ const AssignGroupToAdmin = () => {
   const GroupAssignAPI = async () => {
     setIsAssigning(true);
     try {
-      const url = `http://localhost:4000/api/user/assigngroup/${selectedAdmin._id}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/assigngroup/${selectedAdmin._id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
