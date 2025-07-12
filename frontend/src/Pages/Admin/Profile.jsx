@@ -18,7 +18,7 @@ const Profile = () => {
 
   const getYourProfile = async () => {
     try {
-      const url = `http://localhost:4000/api/user/profile/${userId}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/profile/${userId}`;
       const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
