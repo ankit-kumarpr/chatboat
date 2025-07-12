@@ -27,7 +27,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const url = `http://localhost:4000/api/auth/send-otp`;
+      const url = `https://chatboat-kpvg.onrender.com/api/auth/send-otp`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json"
@@ -61,7 +61,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const url = `http://localhost:4000/api/auth/verify-otp`;
+      const url = `https://chatboat-kpvg.onrender.com/api/auth/verify-otp`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json"
