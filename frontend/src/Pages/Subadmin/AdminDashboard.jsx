@@ -37,7 +37,7 @@ const AdminDashboard = () => {
   const GetYourgroupsList = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/admingroups`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/admingroups`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
