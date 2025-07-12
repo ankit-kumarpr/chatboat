@@ -69,7 +69,7 @@ const UserGroupList = () => {
   const GetGroupsapi = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/getusergroup`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/getusergroup`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -87,7 +87,7 @@ const UserGroupList = () => {
 
   const handleViewRoom = async (groupId, groupName) => {
     try {
-      const url = `http://localhost:4000/api/user/room-group/${groupId}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/room-group/${groupId}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -152,7 +152,7 @@ const UserGroupList = () => {
 
     try {
       setSubmitting(true);
-      const url = `http://localhost:4000/api/user/submitfeedback`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/submitfeedback`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
