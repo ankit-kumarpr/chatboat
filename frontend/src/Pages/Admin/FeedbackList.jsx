@@ -24,7 +24,7 @@ const FeedbackList = () => {
   const FeedBackListAPI = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/feedbacks`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/feedbacks`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
