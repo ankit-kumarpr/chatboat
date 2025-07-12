@@ -74,7 +74,7 @@ const SuperAdminDashboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:4000/api/user/alluserlist",
+        "https://chatboat-kpvg.onrender.com/api/user/alluserlist",
         {
           headers: {
             "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const SuperAdminDashboard = () => {
     try {
       setAdminLoading(true);
       const response = await axios.get(
-        "http://localhost:4000/api/user/getalladmin",
+        "https://chatboat-kpvg.onrender.com/api/user/getalladmin",
         {
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const SuperAdminDashboard = () => {
       setSelectedForHistory(userId);
       setSelectedType(type);
 
-      const url = `http://localhost:4000/api/user/adminbanhistory/${userId}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/adminbanhistory/${userId}`;
       console.log("user Id in history api", userId);
       const response = await axios.get(url, {
         headers: {
@@ -191,7 +191,7 @@ const SuperAdminDashboard = () => {
       };
 
       const response = await axios.put(
-        `http://localhost:4000/api/user/userban/${selectedUser._id}`,
+        `https://chatboat-kpvg.onrender.com/api/user/userban/${selectedUser._id}`,
         requestBody,
         {
           headers: {
@@ -234,7 +234,7 @@ const SuperAdminDashboard = () => {
       };
 
       const response = await axios.put(
-        `http://localhost:4000/api/user/banadmin/${selectedAdmin._id}`,
+        `https://chatboat-kpvg.onrender.com/api/user/banadmin/${selectedAdmin._id}`,
         requestBody,
         {
           headers: {
@@ -273,7 +273,7 @@ const SuperAdminDashboard = () => {
   const handleUnbanUser = async (userId) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/user/unbanuser/${userId}`,
+        `https://chatboat-kpvg.onrender.com/api/user/unbanuser/${userId}`,
         {},
         {
           headers: {
@@ -308,7 +308,7 @@ const SuperAdminDashboard = () => {
   const handleUnbanAdmin = async (adminId) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/user/unbanadmin/${adminId}`,
+        `https://chatboat-kpvg.onrender.com/api/user/unbanadmin/${adminId}`,
         {},
         {
           headers: {
