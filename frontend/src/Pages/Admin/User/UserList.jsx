@@ -51,7 +51,7 @@ const UserList = () => {
   const GetuserData = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/alluserlist`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/alluserlist`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -115,7 +115,7 @@ const UserList = () => {
 
   const BanAdminAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/userban/${selectedAdmin._id}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/userban/${selectedAdmin._id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -152,7 +152,7 @@ const UserList = () => {
 
   const UnbanAdminAPI = async (adminId) => {
     try {
-      const url = `http://localhost:4000/api/user/unbanuser/${adminId}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/unbanuser/${adminId}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -222,7 +222,7 @@ const UserList = () => {
     if (!validateForm()) return;
     
     try {
-      const url = `http://localhost:4000/api/user/userresgister`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/userresgister`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
