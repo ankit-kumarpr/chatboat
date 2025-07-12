@@ -36,7 +36,7 @@ const UserDashboard = () => {
   const GetGroupsapi = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/getusergroup`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/getusergroup`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
