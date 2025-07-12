@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { 
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import {
   Container,
   Grid,
   Card,
@@ -26,8 +26,8 @@ import {
   MenuItem,
   Select,
   FormControl,
-  InputLabel
-} from '@mui/material';
+  InputLabel,
+} from "@mui/material";
 import {
   Group,
   Lock,
@@ -39,25 +39,25 @@ import {
   VideoCall,
   Schedule,
   Feedback,
-  MeetingRoom
-} from '@mui/icons-material';
-import PageTitle from '../../components/PageTitle';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+  MeetingRoom,
+} from "@mui/icons-material";
+import PageTitle from "../../components/PageTitle";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserGroupList = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [feedbackType, setFeedbackType] = useState('');
-  const [feedbackMessage, setFeedbackMessage] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState('');
+  const [feedbackType, setFeedbackType] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [roomsModalOpen, setRoomsModalOpen] = useState(false);
   const [groupRooms, setGroupRooms] = useState([]);
-  const [selectedGroupName, setSelectedGroupName] = useState('');
-  const accessToken = sessionStorage.getItem('accessToken');
+  const [selectedGroupName, setSelectedGroupName] = useState("");
+  const accessToken = sessionStorage.getItem("accessToken");
   const decodedToken = jwtDecode(accessToken);
   const userId = decodedToken.id;
   const navigate = useNavigate();
@@ -73,10 +73,10 @@ const UserGroupList = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
       const response = await axios.get(url, { headers });
-      console.log("Response of group list api",response.data);
+      console.log("Response of group list api", response.data);
       setGroups(response.data.groups || []);
     } catch (error) {
       console.log(error);
@@ -91,12 +91,12 @@ const UserGroupList = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
       const response = await axios.get(url, { headers });
       console.log("rooms api response", response.data);
-      
+
       if (response.data.error === false && response.data.data?.length > 0) {
         setGroupRooms(response.data.data);
         setSelectedGroupName(groupName);
@@ -105,7 +105,7 @@ const UserGroupList = () => {
         Swal.fire({
           title: "No Rooms",
           text: "No rooms found for this group",
-          icon: "info"
+          icon: "info",
         });
       }
     } catch (error) {
@@ -113,7 +113,7 @@ const UserGroupList = () => {
       Swal.fire({
         title: "Error",
         text: error.response?.data?.message || "Something went wrong",
-        icon: "error"
+        icon: "error",
       });
     }
   };
@@ -125,11 +125,11 @@ const UserGroupList = () => {
   const handleCloseRoomsModal = () => {
     setRoomsModalOpen(false);
     setGroupRooms([]);
-    setSelectedGroupName('');
+    setSelectedGroupName("");
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -139,14 +139,14 @@ const UserGroupList = () => {
 
   const handleCloseFeedback = () => {
     setFeedbackOpen(false);
-    setFeedbackType('');
-    setFeedbackMessage('');
-    setSelectedGroup('');
+    setFeedbackType("");
+    setFeedbackMessage("");
+    setSelectedGroup("");
   };
 
   const handleSubmitFeedback = async () => {
     if (!feedbackType || !feedbackMessage || !selectedGroup) {
-      alert('Please fill all fields');
+      alert("Please fill all fields");
       return;
     }
 
@@ -156,31 +156,31 @@ const UserGroupList = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
-      
+
       const requestBody = {
         type: feedbackType,
         message: feedbackMessage,
         group: selectedGroup,
-        customerRef_no: userId
+        customerRef_no: userId,
       };
 
       const response = await axios.post(url, requestBody, { headers });
-     
+
       if (response.data.error === false) {
-          Swal.fire({
-            title: "Good job!",
-            text: "Thank you for your feedback",
-            icon: "success"
-          });
+        Swal.fire({
+          title: "Good job!",
+          text: "Thank you for your feedback",
+          icon: "success",
+        });
         handleCloseFeedback();
       } else {
-        alert(response.data.message || 'Failed to submit feedback');
+        alert(response.data.message || "Failed to submit feedback");
       }
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || 'Something went wrong');
+      alert(error.response?.data?.message || "Something went wrong");
     } finally {
       setSubmitting(false);
     }
@@ -189,9 +189,9 @@ const UserGroupList = () => {
   return (
     <>
       <PageTitle page={"User Groups"} />
-      
+
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
           <Button
             variant="contained"
             startIcon={<Feedback />}
@@ -208,31 +208,38 @@ const UserGroupList = () => {
           aria-labelledby="rooms-modal-title"
           aria-describedby="rooms-modal-description"
         >
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 500,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 1,
-            maxHeight: '80vh',
-            overflow: 'auto'
-          }}>
-            <Typography id="rooms-modal-title" variant="h5" component="h2" gutterBottom>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 500,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 1,
+              maxHeight: "80vh",
+              overflow: "auto",
+            }}
+          >
+            <Typography
+              id="rooms-modal-title"
+              variant="h5"
+              component="h2"
+              gutterBottom
+            >
               Rooms for {selectedGroupName}
             </Typography>
-            
+
             {groupRooms.length > 0 ? (
-              <List sx={{ width: '100%' }}>
+              <List sx={{ width: "100%" }}>
                 {groupRooms.map((room) => (
-                  <ListItem 
-                    key={room._id} 
+                  <ListItem
+                    key={room._id}
                     secondaryAction={
-                      <Button 
-                        variant="contained" 
+                      <Button
+                        variant="contained"
                         color="primary"
                         onClick={() => handleJoinRoom(room._id)}
                         startIcon={<MeetingRoom />}
@@ -242,13 +249,13 @@ const UserGroupList = () => {
                     }
                     sx={{
                       mb: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 1
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
                     }}
                   >
                     <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                      <Avatar sx={{ bgcolor: "primary.main" }}>
                         <MeetingRoom />
                       </Avatar>
                     </ListItemAvatar>
@@ -256,11 +263,19 @@ const UserGroupList = () => {
                       primary={room.roomName}
                       secondary={
                         <>
-                          <Typography component="span" variant="body2" color="text.primary">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
                             Room ID: {room.roomId}
                           </Typography>
                           <br />
-                          <Typography component="span" variant="body2" color="text.secondary">
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.secondary"
+                          >
                             Created: {formatDate(room.createdAt)}
                           </Typography>
                         </>
@@ -270,20 +285,22 @@ const UserGroupList = () => {
                 ))}
               </List>
             ) : (
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                minHeight: 100
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: 100,
+                }}
+              >
                 <Typography variant="body1" color="text.secondary">
                   No rooms available for this group
                 </Typography>
               </Box>
             )}
-            
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
               <Button onClick={handleCloseRoomsModal}>Close</Button>
             </Box>
           </Box>
@@ -296,21 +313,28 @@ const UserGroupList = () => {
           aria-labelledby="feedback-modal-title"
           aria-describedby="feedback-modal-description"
         >
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 1
-          }}>
-            <Typography id="feedback-modal-title" variant="h6" component="h2" gutterBottom>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 1,
+            }}
+          >
+            <Typography
+              id="feedback-modal-title"
+              variant="h6"
+              component="h2"
+              gutterBottom
+            >
               Submit Feedback
             </Typography>
-            
+
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel id="feedback-type-label">Feedback Type</InputLabel>
               <Select
@@ -325,7 +349,7 @@ const UserGroupList = () => {
                 <MenuItem value="UI/UX">UI/UX</MenuItem>
               </Select>
             </FormControl>
-            
+
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel id="group-label">Group</InputLabel>
               <Select
@@ -341,7 +365,7 @@ const UserGroupList = () => {
                 ))}
               </Select>
             </FormControl>
-            
+
             <TextField
               fullWidth
               multiline
@@ -351,15 +375,15 @@ const UserGroupList = () => {
               onChange={(e) => setFeedbackMessage(e.target.value)}
               sx={{ mb: 2 }}
             />
-            
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
               <Button onClick={handleCloseFeedback}>Cancel</Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 onClick={handleSubmitFeedback}
                 disabled={submitting}
               >
-                {submitting ? <CircularProgress size={24} /> : 'Submit'}
+                {submitting ? <CircularProgress size={24} /> : "Submit"}
               </Button>
             </Box>
           </Box>
@@ -373,7 +397,11 @@ const UserGroupList = () => {
                   <CardContent>
                     <Skeleton variant="text" width="60%" height={40} />
                     <Skeleton variant="text" width="40%" height={30} />
-                    <Skeleton variant="rectangular" height={100} sx={{ mt: 2 }} />
+                    <Skeleton
+                      variant="rectangular"
+                      height={100}
+                      sx={{ mt: 2 }}
+                    />
                   </CardContent>
                 </Card>
               </Grid>
@@ -383,24 +411,32 @@ const UserGroupList = () => {
           <Grid container spacing={3}>
             {groups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group._id}>
-                <Card sx={{ 
-                  height: '100%', 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                  }
-                }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+                    },
+                  }}
+                >
                   <CardContent sx={{ flexGrow: 1 }}>
-                    <Box sx={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mb: 2
-                    }}>
-                      <Typography variant="h5" component="div" sx={{ fontWeight: 600 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        component="div"
+                        sx={{ fontWeight: 600 }}
+                      >
                         {group.groupname}
                       </Typography>
                       <Stack direction="row" spacing={1}>
@@ -439,28 +475,38 @@ const UserGroupList = () => {
                       </Stack>
                     </Box>
 
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
                       Created: {formatDate(group.createdAt)}
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
 
-                    <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ mb: 1, fontWeight: 500 }}
+                    >
                       Members ({group.users?.length || 0})
                     </Typography>
 
-                    <Paper elevation={0} sx={{ 
-                      maxHeight: 150, 
-                      overflow: 'auto',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 1
-                    }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        maxHeight: 150,
+                        overflow: "auto",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 1,
+                      }}
+                    >
                       <List dense>
                         {group.users?.slice(0, 3).map((user) => (
                           <ListItem key={user._id}>
                             <ListItemAvatar>
-                              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                              <Avatar sx={{ bgcolor: "primary.main" }}>
                                 <Person />
                               </Avatar>
                             </ListItemAvatar>
@@ -496,15 +542,17 @@ const UserGroupList = () => {
             ))}
           </Grid>
         ) : (
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '50vh',
-            textAlign: 'center'
-          }}>
-            <Group sx={{ fontSize: 80, color: 'text.disabled', mb: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "50vh",
+              textAlign: "center",
+            }}
+          >
+            <Group sx={{ fontSize: 80, color: "text.disabled", mb: 2 }} />
             <Typography variant="h5" color="text.secondary" gutterBottom>
               No Groups Found
             </Typography>

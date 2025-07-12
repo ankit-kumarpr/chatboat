@@ -1,29 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import PageTitle from '../../components/PageTitle';
-import axios from 'axios';
-import { 
-  Card, 
-  CardContent, 
-  Typography, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper, 
-  Box, 
+import React, { useEffect, useState } from "react";
+import PageTitle from "../../components/PageTitle";
+import axios from "axios";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box,
   Grid,
-  CircularProgress
-} from '@mui/material';
-import { 
-  Groups, 
-  Lock, 
-  LockOpen, 
-  Chat, 
-  DoNotDisturbOn 
-} from '@mui/icons-material';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+  CircularProgress,
+} from "@mui/material";
+import {
+  Groups,
+  Lock,
+  LockOpen,
+  Chat,
+  DoNotDisturbOn,
+} from "@mui/icons-material";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const AdminDashboard = () => {
   const [groups, setGroups] = useState([]);
@@ -41,7 +53,7 @@ const AdminDashboard = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
       const response = await axios.get(url, { headers });
       setGroups(response.data.groups || []);
@@ -55,7 +67,7 @@ const AdminDashboard = () => {
   // Prepare data for charts
   const groupTypeData = groups.reduce((acc, group) => {
     const type = group.grouptype;
-    const existingType = acc.find(item => item.name === type);
+    const existingType = acc.find((item) => item.name === type);
     if (existingType) {
       existingType.value += 1;
     } else {
@@ -64,65 +76,65 @@ const AdminDashboard = () => {
     return acc;
   }, []);
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const recentGroupsData = groups
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5)
-    .map(group => ({
+    .map((group) => ({
       name: group.groupname,
       createdAt: new Date(group.createdAt).toLocaleDateString(),
-      members: group.users?.length || 0
+      members: group.users?.length || 0,
     }));
 
   return (
     <>
       <PageTitle page={"Admin Dashboard"} />
-      
+
       <Box sx={{ mt: 4 }}>
         <Grid container spacing={3}>
           {/* Total Groups Card */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ 
-              minHeight: 150, 
-              boxShadow: 3,
-              background: 'linear-gradient(135deg, #3f51b5 0%, #2196f3 100%)',
-              color: 'white'
-            }}>
+            <Card
+              sx={{
+                minHeight: 150,
+                boxShadow: 3,
+                background: "linear-gradient(135deg, #3f51b5 0%, #2196f3 100%)",
+                color: "white",
+              }}
+            >
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  <Groups sx={{ verticalAlign: 'middle', mr: 1 }} />
+                  <Groups sx={{ verticalAlign: "middle", mr: 1 }} />
                   Total Groups
                 </Typography>
                 <Typography variant="h3" component="div">
                   {groups.length}
                 </Typography>
-                <Typography variant="caption">
-                  All created groups
-                </Typography>
+                <Typography variant="caption">All created groups</Typography>
               </CardContent>
             </Card>
           </Grid>
 
           {/* Public Groups Card */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ 
-              minHeight: 150, 
-              boxShadow: 3,
-              background: 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)',
-              color: 'white'
-            }}>
+            <Card
+              sx={{
+                minHeight: 150,
+                boxShadow: 3,
+                background: "linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)",
+                color: "white",
+              }}
+            >
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  <LockOpen sx={{ verticalAlign: 'middle', mr: 1 }} />
+                  <LockOpen sx={{ verticalAlign: "middle", mr: 1 }} />
                   Public Groups
                 </Typography>
                 <Typography variant="h3" component="div">
-                  {groups.filter(g => g.grouptype === 'public').length}
+                  {groups.filter((g) => g.grouptype === "public").length}
                 </Typography>
-                <Typography variant="caption">
-                  Open to everyone
-                </Typography>
+                <Typography variant="caption">Open to everyone</Typography>
               </CardContent>
             </Card>
           </Grid>

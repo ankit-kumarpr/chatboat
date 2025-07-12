@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PageTitle from '../../../components/PageTitle';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PageTitle from "../../../components/PageTitle";
+import axios from "axios";
 import {
   Container,
   Grid,
@@ -33,8 +33,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
-} from '@mui/material';
+  TableRow,
+} from "@mui/material";
 import {
   Group,
   Lock,
@@ -46,19 +46,19 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
   Visibility,
-  Login
-} from '@mui/icons-material';
+  Login,
+} from "@mui/icons-material";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  borderRadius: 2
+  borderRadius: 2,
 };
 
 const SelfGroupList = () => {
@@ -68,8 +68,8 @@ const SelfGroupList = () => {
   const [open, setOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [roomData, setRoomData] = useState({
-    roomId: '',
-    roomName: ''
+    roomId: "",
+    roomName: "",
   });
   const [expandedGroup, setExpandedGroup] = useState(null);
   const [groupRooms, setGroupRooms] = useState({});
@@ -88,7 +88,7 @@ const SelfGroupList = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
       const response = await axios.get(url, { headers });
@@ -101,7 +101,7 @@ const SelfGroupList = () => {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -114,39 +114,39 @@ const SelfGroupList = () => {
     setOpen(false);
     setSelectedGroup(null);
     setRoomData({
-      roomId: '',
-      roomName: ''
+      roomId: "",
+      roomName: "",
     });
     setCreatingRoom(false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setRoomData(prev => ({
+    setRoomData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const CreateRoomForGroup = async () => {
     try {
       if (!selectedGroup || !roomData.roomId || !roomData.roomName) return;
-      
+
       setCreatingRoom(true);
       const url = `https://chatboat-kpvg.onrender.com/api/user/createroom`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
-      const userIds = selectedGroup.users.map(user => user._id);
-      
+      const userIds = selectedGroup.users.map((user) => user._id);
+
       const payload = {
         roomId: roomData.roomId,
         roomName: roomData.roomName,
         groupId: selectedGroup._id,
-        userId: userIds
+        userId: userIds,
       };
 
       console.log("Creating room with payload:", payload);
@@ -156,7 +156,7 @@ const SelfGroupList = () => {
       // Force refresh the rooms list and keep group expanded
       await getRoomList(selectedGroup._id);
       setExpandedGroup(selectedGroup._id);
-      
+
       handleClose();
     } catch (error) {
       console.error("Error creating room:", error);
@@ -168,30 +168,30 @@ const SelfGroupList = () => {
 
   const getRoomList = async (groupId) => {
     try {
-      setRoomsLoading(prev => ({ ...prev, [groupId]: true }));
+      setRoomsLoading((prev) => ({ ...prev, [groupId]: true }));
       const url = `https://chatboat-kpvg.onrender.com/api/user/room-group/${groupId}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
       console.log("Fetching rooms for group:", groupId);
       const response = await axios.get(url, { headers });
       console.log("Rooms received:", response.data);
-      
-      setGroupRooms(prev => ({
+
+      setGroupRooms((prev) => ({
         ...prev,
-        [groupId]: response.data.data || []
+        [groupId]: response.data.data || [],
       }));
     } catch (error) {
       console.error("Error fetching rooms:", error);
-      setGroupRooms(prev => ({
+      setGroupRooms((prev) => ({
         ...prev,
-        [groupId]: []
+        [groupId]: [],
       }));
     } finally {
-      setRoomsLoading(prev => ({ ...prev, [groupId]: false }));
+      setRoomsLoading((prev) => ({ ...prev, [groupId]: false }));
     }
   };
 
@@ -214,7 +214,7 @@ const SelfGroupList = () => {
   return (
     <>
       <PageTitle page={"My Groups"} />
-      
+
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         {loading ? (
           <Grid container spacing={3}>
@@ -224,7 +224,11 @@ const SelfGroupList = () => {
                   <CardContent>
                     <Skeleton variant="text" width="60%" height={40} />
                     <Skeleton variant="text" width="40%" height={30} />
-                    <Skeleton variant="rectangular" height={100} sx={{ mt: 2 }} />
+                    <Skeleton
+                      variant="rectangular"
+                      height={100}
+                      sx={{ mt: 2 }}
+                    />
                   </CardContent>
                 </Card>
               </Grid>
@@ -234,24 +238,32 @@ const SelfGroupList = () => {
           <Grid container spacing={3}>
             {groups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group._id}>
-                <Card sx={{ 
-                  height: '100%', 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-                  }
-                }}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+                    },
+                  }}
+                >
                   <CardContent sx={{ flexGrow: 1 }}>
-                    <Box sx={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mb: 2
-                    }}>
-                      <Typography variant="h5" component="div" sx={{ fontWeight: 600 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        component="div"
+                        sx={{ fontWeight: 600 }}
+                      >
                         {group.groupname}
                       </Typography>
                       <Stack direction="row" spacing={1}>
@@ -290,28 +302,38 @@ const SelfGroupList = () => {
                       </Stack>
                     </Box>
 
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
                       Created: {formatDate(group.createdAt)}
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
 
-                    <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ mb: 1, fontWeight: 500 }}
+                    >
                       Members ({group.users?.length || 0})
                     </Typography>
 
-                    <Paper elevation={0} sx={{ 
-                      maxHeight: 150, 
-                      overflow: 'auto',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 1
-                    }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        maxHeight: 150,
+                        overflow: "auto",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 1,
+                      }}
+                    >
                       <List dense>
                         {group.users?.map((user) => (
                           <ListItem key={user._id}>
                             <ListItemAvatar>
-                              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                              <Avatar sx={{ bgcolor: "primary.main" }}>
                                 <Person />
                               </Avatar>
                             </ListItemAvatar>
@@ -325,7 +347,7 @@ const SelfGroupList = () => {
                     </Paper>
                   </CardContent>
 
-                  <Box sx={{ p: 2, display: 'flex', gap: 2 }}>
+                  <Box sx={{ p: 2, display: "flex", gap: 2 }}>
                     <Button
                       fullWidth
                       variant="contained"
@@ -340,19 +362,31 @@ const SelfGroupList = () => {
                       startIcon={<Visibility />}
                       onClick={() => toggleExpandGroup(group._id)}
                       endIcon={
-                        expandedGroup === group._id ? 
-                          <KeyboardArrowUp /> : 
+                        expandedGroup === group._id ? (
+                          <KeyboardArrowUp />
+                        ) : (
                           <KeyboardArrowDown />
+                        )
                       }
                     >
                       View Rooms
                     </Button>
                   </Box>
 
-                  <Collapse in={expandedGroup === group._id} timeout="auto" unmountOnExit>
+                  <Collapse
+                    in={expandedGroup === group._id}
+                    timeout="auto"
+                    unmountOnExit
+                  >
                     <Box sx={{ p: 2, pt: 0 }}>
                       {roomsLoading[group._id] ? (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            py: 2,
+                          }}
+                        >
                           <Skeleton variant="circular" width={40} height={40} />
                         </Box>
                       ) : groupRooms[group._id]?.length > 0 ? (
@@ -387,15 +421,19 @@ const SelfGroupList = () => {
                           </Table>
                         </TableContainer>
                       ) : (
-                        <Box sx={{ 
-                          display: 'flex', 
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          py: 3,
-                          textAlign: 'center'
-                        }}>
-                          <MeetingRoom sx={{ fontSize: 40, color: 'text.disabled', mb: 1 }} />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            py: 3,
+                            textAlign: "center",
+                          }}
+                        >
+                          <MeetingRoom
+                            sx={{ fontSize: 40, color: "text.disabled", mb: 1 }}
+                          />
                           <Typography variant="body1" color="text.secondary">
                             No rooms created yet
                           </Typography>
@@ -408,15 +446,17 @@ const SelfGroupList = () => {
             ))}
           </Grid>
         ) : (
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '50vh',
-            textAlign: 'center'
-          }}>
-            <Group sx={{ fontSize: 80, color: 'text.disabled', mb: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "50vh",
+              textAlign: "center",
+            }}
+          >
+            <Group sx={{ fontSize: 80, color: "text.disabled", mb: 2 }} />
             <Typography variant="h5" color="text.secondary" gutterBottom>
               No Admin Groups Found
             </Typography>
@@ -461,12 +501,12 @@ const SelfGroupList = () => {
           <Button onClick={handleClose} disabled={creatingRoom}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={CreateRoomForGroup}
             variant="contained"
             disabled={!roomData.roomId || !roomData.roomName || creatingRoom}
           >
-            {creatingRoom ? 'Creating...' : 'Create'}
+            {creatingRoom ? "Creating..." : "Create"}
           </Button>
         </DialogActions>
       </Dialog>

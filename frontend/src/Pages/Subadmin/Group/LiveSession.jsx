@@ -110,7 +110,11 @@ const LiveSession = () => {
         iceServers: [
           { urls: "stun:stun.l.google.com:19302" },
           { urls: "stun:stun1.l.google.com:19302" },
-           { urls: "turn:openrelay.metered.ca:80", username: "openrelayproject", credential: "openrelayproject" },
+          {
+            urls: "turn:openrelay.metered.ca:80",
+            username: "openrelayproject",
+            credential: "openrelayproject",
+          },
         ],
       };
       const pc = new RTCPeerConnection(configuration);
@@ -171,7 +175,7 @@ const LiveSession = () => {
             },
           }
         );
-        console.log("group api response",groupRes);
+        console.log("group api response", groupRes);
         setGroupInfo(groupRes.data.room);
 
         // Fetch chat history
@@ -224,20 +228,22 @@ const LiveSession = () => {
     });
 
     newSocket.on("onlineUsers", (users) => {
-      console.log("Online user list",users);
+      console.log("Online user list", users);
       setOnlineUsers(users);
     });
 
     // Audio call handlers
     newSocket.on("audio-offer", async ({ offer, senderId }) => {
       if (isCallActive) return; // Already in a call
-      
+
       setIncomingCall({ offer, senderId });
     });
 
     newSocket.on("audio-answer", async ({ answer, senderId }) => {
       if (peerConnection) {
-        await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(answer)
+        );
       }
     });
 
@@ -250,7 +256,7 @@ const LiveSession = () => {
     return () => {
       newSocket.disconnect();
       if (localStream) {
-        localStream.getTracks().forEach(track => track.stop());
+        localStream.getTracks().forEach((track) => track.stop());
       }
     };
   }, [roomId, userId, accessToken]);
@@ -283,12 +289,14 @@ const LiveSession = () => {
   // Handle accepting incoming call
   const acceptCall = async () => {
     if (!incomingCall) return;
-    
+
     const pc = await setupWebRTC();
     if (!pc || !socket) return;
 
     try {
-      await pc.setRemoteDescription(new RTCSessionDescription(incomingCall.offer));
+      await pc.setRemoteDescription(
+        new RTCSessionDescription(incomingCall.offer)
+      );
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
 
@@ -317,11 +325,11 @@ const LiveSession = () => {
       setPeerConnection(null);
     }
     if (localStream) {
-      localStream.getTracks().forEach(track => track.stop());
+      localStream.getTracks().forEach((track) => track.stop());
       setLocalStream(null);
     }
     if (remoteStream) {
-      remoteStream.getTracks().forEach(track => track.stop());
+      remoteStream.getTracks().forEach((track) => track.stop());
       setRemoteStream(null);
     }
     setIsCallActive(false);
@@ -376,7 +384,7 @@ const LiveSession = () => {
         display: "flex",
         flexDirection: "column",
         p: 0,
-        background:"red !important"
+        background: "red !important",
         // bgcolor: "background.default",
       }}
     >
@@ -391,136 +399,142 @@ const LiveSession = () => {
       >
         {/* Header */}
         <GradientAppBar
-  sx={{
-    p: 2,
-    display: "flex",
-    alignItems: "flex-start", 
-    justifyContent: "space-between",
-    flexDirection: "column", 
-    
-  }}
-  // style={{background:"none"}}
-  className="bg-danger"
->
-  <Box sx={{
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    mb: 1 
-  }}>
-    <Stack direction="row" alignItems="center" spacing={2}>
-      <Box>
-        <Typography variant="h6" fontWeight="bold">
-          {groupInfo?.roomName || "Room Chat"}
-        </Typography>
-      </Box>
-    </Stack>
-
-    <Stack direction="row" spacing={1}>
-      {!isCallActive && (
-        <Tooltip title="Start Audio Call">
-          <IconButton
-            onClick={startCall}
-            sx={{ color: "common.white" }}
-            disabled={onlineUsers.length < 2}
-          >
-            <Call />
-          </IconButton>
-        </Tooltip>
-      )}
-      {isCallActive && (
-        <Tooltip title="End Call">
-          <IconButton
-            onClick={endCall}
-            sx={{ color: "error.main", bgcolor: "common.white" }}
-          >
-            <CallEnd />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Stack>
-  </Box>
-
-  {/* Online users section */}
-  <Box sx={{ width: '100%', mt: 4, }}>
-    <Typography variant="caption" sx={{ opacity: 0.8 }}>
-      <Stack 
-        direction="row" 
-        spacing={2}
-        alignItems="center"
-        sx={{
-          flexWrap: 'wrap',
-          gap: 1.5,
-        }}
-      >
-        {onlineUsers.slice(0, 3).map((user) => (
-          <Box 
-            key={user._id} 
+          sx={{
+            p: 2,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            flexDirection: "column",
+          }}
+          // style={{background:"none"}}
+          className="bg-danger"
+        >
+          <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              minWidth: 60
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 1,
             }}
           >
-            <Tooltip title={user.name}>
-              <Avatar
-                alt={user.name}
-                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                  user.name
-                )}&background=random`}
-                sx={{ 
-                  width: 50, 
-                  height: 50,
-                  mb: 0.5
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Box>
+                <Typography variant="h6" fontWeight="bold">
+                  {groupInfo?.roomName || "Room Chat"}
+                </Typography>
+              </Box>
+            </Stack>
+
+            <Stack direction="row" spacing={1}>
+              {!isCallActive && (
+                <Tooltip title="Start Audio Call">
+                  <IconButton
+                    onClick={startCall}
+                    sx={{ color: "common.white" }}
+                    disabled={onlineUsers.length < 2}
+                  >
+                    <Call />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {isCallActive && (
+                <Tooltip title="End Call">
+                  <IconButton
+                    onClick={endCall}
+                    sx={{ color: "error.main", bgcolor: "common.white" }}
+                  >
+                    <CallEnd />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Stack>
+          </Box>
+
+          {/* Online users section */}
+          <Box sx={{ width: "100%", mt: 4 }}>
+            <Typography variant="caption" sx={{ opacity: 0.8 }}>
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                sx={{
+                  flexWrap: "wrap",
+                  gap: 1.5,
                 }}
-              />
-            </Tooltip>
-            <Typography 
-              variant="caption" 
-              sx={{
-                textAlign: 'center',
-                display: 'block',
-                width: '100%',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: 60,
-                color: 'common.white'
-              }}
-            >
-              {user.name.split(' ')[0]}
+              >
+                {onlineUsers.slice(0, 3).map((user) => (
+                  <Box
+                    key={user._id}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      minWidth: 60,
+                    }}
+                  >
+                    <Tooltip title={user.name}>
+                      <Avatar
+                        alt={user.name}
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          user.name
+                        )}&background=random`}
+                        sx={{
+                          width: 50,
+                          height: 50,
+                          mb: 0.5,
+                        }}
+                      />
+                    </Tooltip>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        textAlign: "center",
+                        display: "block",
+                        width: "100%",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: 60,
+                        color: "common.white",
+                      }}
+                    >
+                      {user.name.split(" ")[0]}
+                    </Typography>
+                  </Box>
+                ))}
+                {onlineUsers.length > 3 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Chip
+                      label={`+${onlineUsers.length - 3}`}
+                      size="small"
+                      sx={{
+                        height: 32,
+                        width: 32,
+                        borderRadius: "50%",
+                        mb: 0.5,
+                        color: "common.white",
+                        bgcolor: "rgba(255,255,255,0.2)",
+                      }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "common.white" }}
+                    >
+                      More
+                    </Typography>
+                  </Box>
+                )}
+              </Stack>
             </Typography>
           </Box>
-        ))}
-        {onlineUsers.length > 3 && (
-          <Box sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}>
-            <Chip
-              label={`+${onlineUsers.length - 3}`}
-              size="small"
-              sx={{ 
-                height: 32,
-                width: 32,
-                borderRadius: '50%',
-                mb: 0.5,
-                color: 'common.white',
-                bgcolor: 'rgba(255,255,255,0.2)'
-              }}
-            />
-            <Typography variant="caption" sx={{ color: 'common.white' }}>
-              More
-            </Typography>
-          </Box>
-        )}
-      </Stack>
-    </Typography>
-  </Box>
-</GradientAppBar>
+        </GradientAppBar>
 
         {/* Audio elements (hidden) */}
         <audio ref={localAudioRef} autoPlay muted />
@@ -706,7 +720,9 @@ const LiveSession = () => {
         <DialogTitle>Incoming Audio Call</DialogTitle>
         <DialogContent>
           <Typography>
-            {onlineUsers.find(u => u._id === incomingCall?.senderId)?.name || "Someone"} is calling...
+            {onlineUsers.find((u) => u._id === incomingCall?.senderId)?.name ||
+              "Someone"}{" "}
+            is calling...
           </Typography>
         </DialogContent>
         <DialogActions>

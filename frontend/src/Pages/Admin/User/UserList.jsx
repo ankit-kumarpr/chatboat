@@ -13,9 +13,9 @@ import {
   InputLabel,
   Typography,
   Snackbar,
-  Alert
+  Alert,
 } from "@mui/material";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { Block, Circle, CheckCircle, PersonAdd } from "@mui/icons-material";
 
 const UserList = () => {
@@ -30,17 +30,17 @@ const UserList = () => {
   const [filterStatus, setFilterStatus] = useState("unbanned");
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
-    severity: 'success'
+    message: "",
+    severity: "success",
   });
   const accesstoken = sessionStorage.getItem("accessToken");
 
   // Add User Form State
   const [userForm, setUserForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    gender: ''
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -105,10 +105,10 @@ const UserList = () => {
   const handleCloseAddUserModal = () => {
     setOpenAddUserModal(false);
     setUserForm({
-      name: '',
-      email: '',
-      phone: '',
-      gender: ''
+      name: "",
+      email: "",
+      phone: "",
+      gender: "",
     });
     setFormErrors({});
   };
@@ -130,7 +130,7 @@ const UserList = () => {
 
       const response = await axios.put(url, requestBody, { headers });
       console.log("Response of Ban api", response.data);
-      if(response.data.error==false){
+      if (response.data.error == false) {
         Swal.fire({
           title: "Good job!",
           text: "You User Ban SuccessFully",
@@ -180,79 +180,79 @@ const UserList = () => {
 
   const validateForm = () => {
     const errors = {};
-    
-    if (!userForm.name.trim()) errors.name = 'Name is required';
-    
+
+    if (!userForm.name.trim()) errors.name = "Name is required";
+
     if (!userForm.email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userForm.email)) {
-      errors.email = 'Invalid email format';
+      errors.email = "Invalid email format";
     }
-    
+
     if (!userForm.phone.trim()) {
-      errors.phone = 'Phone is required';
+      errors.phone = "Phone is required";
     } else if (!/^[0-9]{10}$/.test(userForm.phone)) {
-      errors.phone = 'Phone must be 10 digits';
+      errors.phone = "Phone must be 10 digits";
     }
-    
-    if (!userForm.gender) errors.gender = 'Gender is required';
-    
+
+    if (!userForm.gender) errors.gender = "Gender is required";
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserForm(prev => ({
+    setUserForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handlePhoneInput = (e) => {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === '' || re.test(e.target.value)) {
+    if (e.target.value === "" || re.test(e.target.value)) {
       if (e.target.value.length <= 10) {
-        handleInputChange({ target: { name: 'phone', value: e.target.value } });
+        handleInputChange({ target: { name: "phone", value: e.target.value } });
       }
     }
   };
 
   const RegisterUserAPI = async () => {
     if (!validateForm()) return;
-    
+
     try {
       const url = `https://chatboat-kpvg.onrender.com/api/user/userresgister`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accesstoken}`
+        Authorization: `Bearer ${accesstoken}`,
       };
 
       const response = await axios.post(url, userForm, { headers });
       console.log("Response of register user", response.data);
-      
+
       if (response.data.error === false) {
         setSnackbar({
           open: true,
-          message: 'User registered successfully!',
-          severity: 'success'
+          message: "User registered successfully!",
+          severity: "success",
         });
         handleCloseAddUserModal();
         GetuserData(); // Refresh the user list
       } else {
         setSnackbar({
           open: true,
-          message: response.data.message || 'Registration failed',
-          severity: 'error'
+          message: response.data.message || "Registration failed",
+          severity: "error",
         });
       }
     } catch (error) {
       console.log(error);
       setSnackbar({
         open: true,
-        message: error.response?.data?.message || 'Registration failed',
-        severity: 'error'
+        message: error.response?.data?.message || "Registration failed",
+        severity: "error",
       });
     }
   };
@@ -325,7 +325,7 @@ const UserList = () => {
   ];
 
   const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
@@ -333,7 +333,9 @@ const UserList = () => {
       <PageTitle page={"User List"} />
 
       {/* Filter Section */}
-      <Box sx={{ mb: 2, display: "flex", justifyContent: "space-around", mt:5 }}>
+      <Box
+        sx={{ mb: 2, display: "flex", justifyContent: "space-around", mt: 5 }}
+      >
         <Button
           variant="contained"
           startIcon={<PersonAdd />}
@@ -342,7 +344,7 @@ const UserList = () => {
         >
           Add User
         </Button>
-        
+
         <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
           <InputLabel>Filter by Status</InputLabel>
           <Select
@@ -563,12 +565,12 @@ const UserList = () => {
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>

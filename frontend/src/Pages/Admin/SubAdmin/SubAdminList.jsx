@@ -15,7 +15,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { Block, Circle, CheckCircle, Add } from "@mui/icons-material";
 
 const SubAdminList = () => {
@@ -30,17 +30,17 @@ const SubAdminList = () => {
   const [filterStatus, setFilterStatus] = useState("unbanned");
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
-    severity: 'success'
+    message: "",
+    severity: "success",
   });
   const accesstoken = sessionStorage.getItem("accessToken");
 
   // Add Admin Form State
   const [adminForm, setAdminForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    gender: '',
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -98,10 +98,10 @@ const SubAdminList = () => {
   const handleCloseAddAdminModal = () => {
     setOpenAddAdminModal(false);
     setAdminForm({
-      name: '',
-      email: '',
-      phone: '',
-      gender: '',
+      name: "",
+      email: "",
+      phone: "",
+      gender: "",
     });
     setErrors({});
   };
@@ -123,7 +123,7 @@ const SubAdminList = () => {
 
       const response = await axios.put(url, requestBody, { headers });
       console.log("Response of Ban api", response.data);
-      if(response.data.error==false){
+      if (response.data.error == false) {
         Swal.fire({
           title: "Good job!",
           text: "You Admin Ban SuccessFully",
@@ -174,40 +174,42 @@ const SubAdminList = () => {
 
   const validateAdminForm = () => {
     const newErrors = {};
-    
-    if (!adminForm.name.trim()) newErrors.name = 'Name is required';
-    
+
+    if (!adminForm.name.trim()) newErrors.name = "Name is required";
+
     if (!adminForm.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(adminForm.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
     }
-    
+
     if (!adminForm.phone.trim()) {
-      newErrors.phone = 'Phone is required';
+      newErrors.phone = "Phone is required";
     } else if (!/^[0-9]{10}$/.test(adminForm.phone)) {
-      newErrors.phone = 'Phone must be 10 digits';
+      newErrors.phone = "Phone must be 10 digits";
     }
-    
-    if (!adminForm.gender) newErrors.gender = 'Gender is required';
-    
+
+    if (!adminForm.gender) newErrors.gender = "Gender is required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleAdminFormChange = (e) => {
     const { name, value } = e.target;
-    setAdminForm(prev => ({
+    setAdminForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handlePhoneInput = (e) => {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === '' || re.test(e.target.value)) {
+    if (e.target.value === "" || re.test(e.target.value)) {
       if (e.target.value.length <= 10) {
-        handleAdminFormChange({ target: { name: 'phone', value: e.target.value } });
+        handleAdminFormChange({
+          target: { name: "phone", value: e.target.value },
+        });
       }
     }
   };
@@ -220,17 +222,17 @@ const SubAdminList = () => {
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${accesstoken}`
+        Authorization: `Bearer ${accesstoken}`,
       };
 
       const response = await axios.post(url, adminForm, { headers });
       console.log("admin register api", response.data);
-      
+
       if (response.data.error === false) {
         setSnackbar({
           open: true,
-          message: 'Admin registered successfully!',
-          severity: 'success'
+          message: "Admin registered successfully!",
+          severity: "success",
         });
         handleCloseAddAdminModal();
         GetAdminData(); // Refresh the admin list
@@ -239,14 +241,14 @@ const SubAdminList = () => {
       console.log(error);
       setSnackbar({
         open: true,
-        message: error.response?.data?.message || 'Registration failed',
-        severity: 'error'
+        message: error.response?.data?.message || "Registration failed",
+        severity: "error",
       });
     }
   };
 
   const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   const filteredAdmins = adminData.filter((admin) => {
@@ -319,10 +321,12 @@ const SubAdminList = () => {
 
   return (
     <>
-     <PageTitle page="Admin List" style={{ marginTop: "80px" }} />
+      <PageTitle page="Admin List" style={{ marginTop: "80px" }} />
 
       {/* Filter and Add Admin Section */}
-      <Box sx={{ mb: 2, display: "flex", justifyContent: "space-around",mt:5 }}>
+      <Box
+        sx={{ mb: 2, display: "flex", justifyContent: "space-around", mt: 5 }}
+      >
         <Button
           variant="contained"
           color="success"
@@ -331,7 +335,7 @@ const SubAdminList = () => {
         >
           Add Admin
         </Button>
-        
+
         <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
           <InputLabel>Filter by Status</InputLabel>
           <Select
@@ -552,12 +556,12 @@ const SubAdminList = () => {
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>

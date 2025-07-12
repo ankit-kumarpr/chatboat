@@ -77,9 +77,10 @@ const CreateGroup = () => {
 
   const handleOpenAddUserModal = (group) => {
     setSelectedGroup(group);
-    const existingUserIds = group.users?.map(user => 
-      typeof user === 'string' ? user : user._id
-    ) || [];
+    const existingUserIds =
+      group.users?.map((user) =>
+        typeof user === "string" ? user : user._id
+      ) || [];
     setSelectedUsers(existingUserIds);
     setOpenAddUserModal(true);
   };
@@ -141,7 +142,7 @@ const CreateGroup = () => {
   const AddUserToGroupAPI = async () => {
     try {
       if (!selectedGroup) return;
-      
+
       const url = `https://chatboat-kpvg.onrender.com/api/user/add-users/${selectedGroup._id}`;
       const headers = {
         "Content-Type": "application/json",
@@ -153,7 +154,7 @@ const CreateGroup = () => {
       };
 
       const response = await axios.put(url, requestBody, { headers });
-      
+
       if (response.data.error === false) {
         Swal.fire({
           title: "Success!",
@@ -167,7 +168,8 @@ const CreateGroup = () => {
       console.log(error);
       Swal.fire({
         title: "Error!",
-        text: error.response?.data?.message || "Failed to update users in group",
+        text:
+          error.response?.data?.message || "Failed to update users in group",
         icon: "error",
       });
     }
@@ -176,7 +178,7 @@ const CreateGroup = () => {
   const RemoveUserFromGroupAPI = async () => {
     try {
       if (!selectedGroup || usersToRemove.length === 0) return;
-      
+
       const url = `https://chatboat-kpvg.onrender.com/api/user/remove-user/${selectedGroup._id}`;
       const headers = {
         "Content-Type": "application/json",
@@ -188,7 +190,7 @@ const CreateGroup = () => {
       };
 
       const response = await axios.put(url, requestBody, { headers });
-      
+
       if (response.data.error === false) {
         Swal.fire({
           title: "Success!",
@@ -202,7 +204,8 @@ const CreateGroup = () => {
       console.log(error);
       Swal.fire({
         title: "Error!",
-        text: error.response?.data?.message || "Failed to remove users from group",
+        text:
+          error.response?.data?.message || "Failed to remove users from group",
         icon: "error",
       });
     }
@@ -282,15 +285,18 @@ const CreateGroup = () => {
   const isUserInGroup = (userId) => {
     if (!selectedGroup) return false;
     return selectedGroup.users?.some(
-      groupUser => (typeof groupUser === 'string' ? groupUser : groupUser._id) === userId
+      (groupUser) =>
+        (typeof groupUser === "string" ? groupUser : groupUser._id) === userId
     );
   };
 
   const getGroupMemberIds = () => {
     if (!selectedGroup) return [];
-    return selectedGroup.users?.map(user => 
-      typeof user === 'string' ? user : user._id
-    ) || [];
+    return (
+      selectedGroup.users?.map((user) =>
+        typeof user === "string" ? user : user._id
+      ) || []
+    );
   };
 
   return (
@@ -327,7 +333,9 @@ const CreateGroup = () => {
               <InputLabel>Group Type</InputLabel>
               <Select
                 value={filters.groupType}
-                onChange={(e) => handleFilterChange("groupType", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("groupType", e.target.value)
+                }
                 label="Group Type"
               >
                 <MenuItem value="all">All Types</MenuItem>
@@ -340,7 +348,9 @@ const CreateGroup = () => {
               <InputLabel>Chat Status</InputLabel>
               <Select
                 value={filters.chatStatus}
-                onChange={(e) => handleFilterChange("chatStatus", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("chatStatus", e.target.value)
+                }
                 label="Chat Status"
               >
                 <MenuItem value="all">All Statuses</MenuItem>
@@ -440,8 +450,15 @@ const CreateGroup = () => {
                       Members: {group.users?.length || 0}
                     </Typography>
                   </CardContent>
-                  
-                  <Box sx={{ p: 2, display: "flex", justifyContent: "flex-end", gap: 2 }}>
+
+                  <Box
+                    sx={{
+                      p: 2,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      gap: 2,
+                    }}
+                  >
                     <Button
                       variant="outlined"
                       startIcon={<PersonAdd />}
@@ -657,7 +674,7 @@ const CreateGroup = () => {
                   <ListItem
                     key={user._id}
                     sx={{
-                      backgroundColor: isExisting ? '#f5f5f5' : 'inherit',
+                      backgroundColor: isExisting ? "#f5f5f5" : "inherit",
                     }}
                     secondaryAction={
                       <Checkbox
@@ -695,9 +712,7 @@ const CreateGroup = () => {
             </List>
           </Paper>
 
-          <Box
-            sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button onClick={handleCloseAddUserModal} variant="outlined">
               Cancel
             </Button>
@@ -754,45 +769,45 @@ const CreateGroup = () => {
 
           <Paper sx={{ maxHeight: 400, overflow: "auto", mb: 3 }}>
             <List dense>
-              {users.filter(user => isUserInGroup(user._id)).map((user) => (
-                <ListItem
-                  key={user._id}
-                  secondaryAction={
-                    <Checkbox
-                      edge="end"
-                      checked={usersToRemove.includes(user._id)}
-                      onChange={() => handleUserToRemoveSelect(user._id)}
-                    />
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={user.name}
-                      src="/static/images/avatar/1.jpg"
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <>
-                        {user.name}
-                        <Chip
-                          label="Current Member"
-                          size="small"
-                          color="primary"
-                          sx={{ ml: 1 }}
-                        />
-                      </>
+              {users
+                .filter((user) => isUserInGroup(user._id))
+                .map((user) => (
+                  <ListItem
+                    key={user._id}
+                    secondaryAction={
+                      <Checkbox
+                        edge="end"
+                        checked={usersToRemove.includes(user._id)}
+                        onChange={() => handleUserToRemoveSelect(user._id)}
+                      />
                     }
-                    secondary={user.email}
-                  />
-                </ListItem>
-              ))}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={user.name}
+                        src="/static/images/avatar/1.jpg"
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <>
+                          {user.name}
+                          <Chip
+                            label="Current Member"
+                            size="small"
+                            color="primary"
+                            sx={{ ml: 1 }}
+                          />
+                        </>
+                      }
+                      secondary={user.email}
+                    />
+                  </ListItem>
+                ))}
             </List>
           </Paper>
 
-          <Box
-            sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button onClick={handleCloseRemoveUserModal} variant="outlined">
               Cancel
             </Button>
