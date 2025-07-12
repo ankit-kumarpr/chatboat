@@ -54,7 +54,7 @@ const AllgroupList = () => {
   const GroupListAPI = async () => {
     try {
       setLoading(true);
-      const url = `http://localhost:4000/api/user/grouplist`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/grouplist`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -94,7 +94,7 @@ const AllgroupList = () => {
   const fetchRooms = async (groupId) => {
     try {
       setRoomsLoading(prev => ({ ...prev, [groupId]: true }));
-      const url = `http://localhost:4000/api/user/room-group/${groupId}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/room-group/${groupId}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
