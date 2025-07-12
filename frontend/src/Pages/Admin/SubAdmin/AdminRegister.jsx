@@ -76,7 +76,7 @@ const AdminRegister = () => {
     if (validate()) {
       try {
         const response = await axios.post(
-          'http://localhost:4000/api/user/adminregister',
+          'https://chatboat-kpvg.onrender.com/api/user/adminregister',
           formData,
           {
             headers: {
