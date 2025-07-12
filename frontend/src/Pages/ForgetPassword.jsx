@@ -29,7 +29,7 @@ const ForgetPassword = () => {
     try {
       setIsLoading(true);
 
-      const url = `http://localhost:5000/api/admin/reset-password/${token}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/admin/reset-password/${token}`;
       const response = await axios.post(url, { newPassword });
 
       // console.log("Response of reset password", response.data);
