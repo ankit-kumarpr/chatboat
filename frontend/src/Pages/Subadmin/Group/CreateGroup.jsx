@@ -105,7 +105,7 @@ const CreateGroup = () => {
   // API Calls
   const CreateGroupAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/create-group`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/create-group`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -142,7 +142,7 @@ const CreateGroup = () => {
     try {
       if (!selectedGroup) return;
       
-      const url = `http://localhost:4000/api/user/add-users/${selectedGroup._id}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/add-users/${selectedGroup._id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -177,7 +177,7 @@ const CreateGroup = () => {
     try {
       if (!selectedGroup || usersToRemove.length === 0) return;
       
-      const url = `http://localhost:4000/api/user/remove-user/${selectedGroup._id}`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/remove-user/${selectedGroup._id}`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -210,7 +210,7 @@ const CreateGroup = () => {
 
   const GroupListAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/grouplist`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/grouplist`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -226,7 +226,7 @@ const CreateGroup = () => {
 
   const UserListAPI = async () => {
     try {
-      const url = `http://localhost:4000/api/user/alluserlist`;
+      const url = `https://chatboat-kpvg.onrender.com/api/user/alluserlist`;
       const headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
