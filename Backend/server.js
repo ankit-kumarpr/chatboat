@@ -2,11 +2,55 @@ const http = require("http");
 const app = require("./app");
 const port = process.env.PORT || 3000;
 const ChatMessage = require("./Models/ChatMessage");
-const User = require("./Models/UserModel"); // Make sure to import your User model
+const User = require("./Models/UserModel");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Configure file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit per file
+});
+
+// Add file upload route
+app.post('/api/upload', upload.array('files'), (req, res) => {
+  try {
+    const files = req.files.map(file => ({
+      filename: file.filename,
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      path: file.path,
+      url: `/uploads/${file.filename}`
+    }));
+    res.json({ success: true, files });
+  } catch (error) {
+    console.error('Error uploading files:', error);
+    res.status(500).json({ success: false, error: 'File upload failed' });
+  }
+});
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const server = http.createServer(app);
 
-// Socket.IO setup
+// Socket.IO setup remains the same until the sendMessage handler
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
@@ -74,48 +118,47 @@ io.on("connection", (socket) => {
   });
 
   // Handle sending a chat message
-  socket.on("sendMessage", async ({ message }) => {
-    const roomId = socket.roomId;
-    const userId = socket.userId;
+ socket.on("sendMessage", async ({ message, files = [] }) => {
+  const roomId = socket.roomId;
+  const userId = socket.userId;
 
-    if (!roomId || !userId) {
-      console.error("Missing roomId or userId for socket:", socket.id);
-      return;
-    }
+  if (!roomId || !userId) {
+    console.error("Missing roomId or userId for socket:", socket.id);
+    return;
+  }
 
-    console.log("Sending message to roomId:", roomId);
-    console.log("From userId:", userId);
-    console.log("Message content:", message);
+  try {
+    const chatMsg = new ChatMessage({
+      room: roomId,
+      sender: userId,
+      message,
+      files
+    });
 
-    try {
-      const chatMsg = new ChatMessage({
-        room: roomId,
-        sender: userId,
-        message,
-      });
+    const response = await chatMsg.save();
+    console.log("Message saved:", response);
 
-      const response = await chatMsg.save();
-      console.log("Message saved:", response);
+    const populatedMsg = await ChatMessage.findById(chatMsg._id)
+      .populate("sender", "name email")
+      .lean();
 
-      const populatedMsg = await ChatMessage.findById(chatMsg._id)
-        .populate("sender", "name email")
-        .lean();
+    io.to(roomId).emit("receiveMessage", {
+      _id: populatedMsg._id,
+      room: populatedMsg.room,
+      message: populatedMsg.message,
+      files: populatedMsg.files,
+      sentAt: populatedMsg.sentAt,
+      sender: {
+        _id: populatedMsg.sender._id,
+        name: populatedMsg.sender.name,
+        email: populatedMsg.sender.email,
+      },
+    });
+  } catch (err) {
+    console.error("Error saving message:", err);
+  }
+});
 
-      io.to(roomId).emit("receiveMessage", {
-        _id: populatedMsg._id,
-        room: populatedMsg.room,
-        message: populatedMsg.message,
-        sentAt: populatedMsg.sentAt,
-        sender: {
-          _id: populatedMsg.sender._id,
-          name: populatedMsg.sender.name,
-          email: populatedMsg.sender.email,
-        },
-      });
-    } catch (err) {
-      console.error("Error saving message:", err);
-    }
-  });
 
   // WebRTC Audio Call - Offer
   socket.on("audio-offer", ({ roomId, offer, senderId }) => {
